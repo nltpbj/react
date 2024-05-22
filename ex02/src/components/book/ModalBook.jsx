@@ -2,16 +2,14 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const ModalBook = ({ book }) => {
+const ModalBook = ({book}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const {title, contents, thumbnail, publisher, authors, price} = book;
-
+    const {title, thumbnail, publisher, contents, isbn, price, authors} = book;
     return (
         <>
-            <img onClick={handleShow} style={{cursor:'pointer'}}
-                src={thumbnail || 'http://via.placeholder.com/120x170'} width="100%"/>
+            <img onClick={handleShow} src={book.thumbnail || 'http://via.placeholder.com/120x170'} width="100%"/>
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -21,20 +19,19 @@ const ModalBook = ({ book }) => {
                     <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>저자:{authors}</div>
-                    <div>출판사:{publisher}</div>
-                    <div>가격:{price}원</div>
-                    <hr/>
-                    {contents}
+                 <div>가격:{price}원</div>
+                 <div>저자:{authors}</div>
+                 <div>출판사:{publisher}</div>
+                 <hr/>
+                 <div>{contents}</div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        닫기    
                     </Button>
                 </Modal.Footer>
             </Modal>
         </>
-        
     );
 }
 
