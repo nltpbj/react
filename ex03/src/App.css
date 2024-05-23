@@ -25,5 +25,16 @@
 }
 
 .userLogin .title {
-    width: 100px;
+    width: 40px;
+    
+}
+
+.bookSearch .cart{
+    font-size: 25px;
+    color: blue;
+    cursor: pointer;
+}
+
+.bookSearch .cart:hover{
+    color: red;
 }
