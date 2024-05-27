@@ -27,7 +27,7 @@ const InsertPage = () => {
     if(!window.confirm("게시글을 등록하실래요?")) return;
     //게시글등록
     const now=new Date();
-    const date=moment(now).format('YYYY-MM-DD HH시mm분ss초')
+    const date=moment(now).format('YYYY-MM-DD HH시mm분ss초');
     const email=sessionStorage.getItem('email');
     setLoading(true);
     await addDoc(collection(db, 'posts'), {...form, date, email});
