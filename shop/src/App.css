@@ -64,3 +64,9 @@
     cursor: pointer;
     margin-bottom: 10px;
 }
+
+.heart {
+    color: red;
+    cursor: pointer;
+    font-size: 15px;
+}

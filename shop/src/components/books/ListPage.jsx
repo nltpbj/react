@@ -1,10 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Button, Table, Row, Col } from 'react-bootstrap';
+import { Button, Table, Row, Col, Form, InputGroup, Alert } from 'react-bootstrap';
 import '../Paging.css'
 import Pagination from 'react-js-pagination';
+import Spinner from 'react-bootstrap/Spinner';
 
 const ListPage = () => {
+    const [key, setKey] = useState('title');
+    const [word, setWord] = useState('');
+    const [loading, setLoading] = useState(false);
     const [chk, setChk] = useState(0);
     const [books, setBooks] = useState([]);
     const [page, setPage] = useState(1);
@@ -18,12 +22,20 @@ const ListPage = () => {
     }, [books]);
 
     const callAPI = async() => {
-        const url=`/books/list?page=${page}&size=${size}`;
+        setLoading(true);
+        const url=`/books/list?page=${page}&size=${size}&key=${key}&word=${word}`; // 값을 받아옴
         const res=await axios.get(url);
         const documents=res.data.documents;
         console.log(res.data);
-        setBooks(documents.map(book=>book && {...book, checked:false}));
+        if(documents) {
+            setBooks(documents.map(book=>book && {...book, checked:false}));
+          }else{
+            setBooks([]);
+          }
+        
         setCount(res.data.count);
+        if(page > Math.ceil(res.data.count/size)) setPage(page-1);
+        setLoading(false);
     }
     useEffect(()=> {
         callAPI();
@@ -71,14 +83,41 @@ const ListPage = () => {
             }
         });
     }
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        setPage(1);
+        callAPI();
+    }
+
+    if(loading) return <h1 className='text-center my-5'><Spinner animation="border" variant="primary"/></h1>
   return (
     <div className='my-5'>
         <h1 className='text-center mb-5'>도서목록</h1>
         <Row className='mb-2'>
+            <Col xs={8} md={5} lg={4}>
+                <form onSubmit={onSubmit}>
+                    <InputGroup>
+                        <Form.Select onChange={(e)=>setKey(e.target.value)}
+                            className='me-2' value={key}>
+                            <option value="title">제목</option>
+                            <option value="author">저자</option>
+                            <option value="publisher">출판사</option>
+                        </Form.Select>
+                        <Form.Control value={word} onChange={(e)=>setWord(e.target.value)} 
+                            placeholder='검색어'/>
+                        <Button type='submit'>검색</Button>
+                    </InputGroup>
+                </form>
+            </Col>
+            <Col>검색수: {count}건</Col>
+            {count > 0 &&
            <Col className='text-end'>
             <Button onClick={onDeleteChecked} variant='danger'>선택도서삭제</Button>
            </Col> 
-         </Row>   
+            }
+         </Row>
+         {count > 0 ?
         <Table striped bordered hover>
             <thead>
                 <tr className='table-danger'>
@@ -98,7 +137,7 @@ const ListPage = () => {
                         <td><input onChange={(e)=>onChangeSingle(e, book.bid)} checked={book.checked} type="checkbox"/></td>
                         <td>{book.bid}</td>
                         <td><img src={book.image} width="40px"/></td>
-                        <td>{book.title}</td>
+                        <td><a href={`/books/update/${book.bid}`}>{book.title}</a></td>
                         <td>{book.fmtprice}</td>
                         <td>{book.author}</td>
                         <td>{book.fmtdate}</td>
@@ -107,6 +146,10 @@ const ListPage = () => {
                 )}
             </tbody>
         </Table>
+        :
+        <div><Alert className='text-center'>검색결과가 없습니다</Alert></div>
+        } 
+        {count > size && 
         <Pagination
             activePage={page}
             itemsCountPerPage={size}
@@ -115,6 +158,7 @@ const ListPage = () => {
             prevPageText={"‹"}
             nextPageText={"›"}
             onChange={ (e)=>setPage(e) }/>
+        }    
     </div>
   )
 }
