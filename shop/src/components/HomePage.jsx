@@ -42,6 +42,14 @@ const HomePage = () => {
       window.location.href='/users/login';
     }
   }
+
+  const onClickCnacel = async(bid) => {
+    const res = await axios.post('/books/likes/delete', {bid, uid});
+    if(res.data.result == 1){
+      callAPI();
+    }
+  }
+
   return (
     <div className='mt-5'>
       <Row className='mb-3 justify-content-end'>
@@ -66,8 +74,11 @@ const HomePage = () => {
           <Col key={book.bid} xs={6} md={4} lg={2} className='mb-3'>
             <Card>
               <Card.Body>
+              <a href={`/books/read/${book.bid}`}>
                 <img src={book.image} width="100%"/>
+              </a>
               </Card.Body>
+
               <Card.Footer>
                 <div className='ellipsis mb-2' style={{fontSize:'12px'}}>
                   {book.title}
@@ -83,7 +94,7 @@ const HomePage = () => {
                     <BsBalloonHeart className='heart' 
                       onClick={()=>onClicklike(book.bid)}/>
                     :
-                    <BsBalloonHeartFill className='heart'/>
+                    <BsBalloonHeartFill onClick={()=>onClickCnacel(book.bid)} className='heart'/>
                     }
                       <span style={{fontSize:'10px'}} 
                         className='user-text'>{book.lcnt}</span>

@@ -22,17 +22,21 @@ const LoginPage = () => {
         return;
     }
     //로그인체크
-   // console.log(uid, upass);
+   //console.log(uid, upass);
    const res=await axios.post("/users/login", form);
    //console.log(res.data.result);
    const result=parseInt(res.data.result);
    if(result===0){
-    alert("아이디가 존재하지 않습니다");
+     alert("아이디가 존재하지 않습니다!");
    }else if(result===2){
-    alert("비밀번호가 일치하지 않습니다");
+     alert("비밀번호가 일치하지 않습니다!");
    }else if(result===1){
-    sessionStorage.setItem('uid', uid);
-    navi('/');
+     sessionStorage.setItem('uid', uid);
+     if(sessionStorage.getItem('target')){
+       navi(sessionStorage.getItem('target'));
+     }else{
+       navi('/');
+     }
    }
  }
  
