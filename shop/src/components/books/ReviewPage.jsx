@@ -18,13 +18,19 @@ const ReviewPage = ({bid}) => {
 
     const callAPI = async() => {
         const res = await axios.get(`/review/list/${bid}?page=${page}&size=${size}`);
-        console.log(res.data);
+       // console.log(res.data);
         setCount(res.data.count);
-
+        //리뷰가 하나도 없는경우
+    if(!res.data.documents){
+        setReviews([]);
+      }else{  
+        setCount(res.data.count);
         //현재페이지가 마지막 페이지보다 크면 페이지를 1감소시킨다.
         if(page> Math.ceil(res.data.count/size)) setPage(page-1);
-        const data=res.data.documents.map(doc=>doc && {...doc, ellip:true, isEdit:false, text:doc.contents});
+        const data=res.data.documents.map(doc=>doc && 
+              {...doc, ellip:true, isEdit:false, text:doc.contents});
         setReviews(data);
+      }
     }
     const onClickContents = (rid) => {
         const data=reviews.map(doc=>doc.rid===rid ? {...doc, ellip:!doc.ellip}: doc);
