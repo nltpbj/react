@@ -32,7 +32,8 @@ const ReviewPage = ({bid}) => {
         setReviews(data);
       }
     }
-    const onClickContents = (rid) => {
+    const onClickContents = (rid, contents, text) => {
+    
         const data=reviews.map(doc=>doc.rid===rid ? {...doc, ellip:!doc.ellip}: doc);
         setReviews(data);
     }
@@ -73,10 +74,14 @@ const ReviewPage = ({bid}) => {
         const data=reviews.map(doc=>doc.rid===rid ? {...doc, isEdit:true} : doc);
         setReviews(data);
       }
-        const onClickCancel = (rid) => {
-            const data=reviews.map(doc=>doc.rid===rid ? {...doc, isEdit:false, contents:doc.text} : doc);
-            setReviews(data);
-        }
+        const onClickCancel = (rid, contents, text) => {
+            if(contents !== text){
+                if(!window.confirm("정말로 취소할래요?")) return; 
+            }
+                const data=reviews.map(doc=>doc.rid===rid ? {...doc, isEdit:false, contents:doc.text, ellip:false} : doc);
+                setReviews(data);
+            }
+        
       const onChangeForm = (e, rid) => {
         const data=reviews.map(doc=>doc.rid===rid ?{...doc, contents:e.target.value}: doc);
         setReviews(data);
@@ -123,7 +128,7 @@ const ReviewPage = ({bid}) => {
                                 <span>{r.fmtdate}</span>
                             </Col>
                             {(uid===r.uid && !r.isEdit) &&
-                            <Col className='text-end'>
+                            <Col className='text-end '>
                                 <Button onClick={()=>onClickUpdate(r.rid)} variant='success' className='me-2 btn-sm'>수정</Button>
                                 <Button onClick={()=>onClickDelete(r.rid)} variant='danger btn-sm'>삭제</Button>
                             </Col>
@@ -134,7 +139,7 @@ const ReviewPage = ({bid}) => {
                             <Col className='text-end'>
                                 <Button onClick={()=>onClickSave(r.rid, r.contents)}
                                     variant='success' className='me-2 btn-sm'>저장</Button>
-                                <Button onClick={()=>onClickCancel(r.rid)}
+                                <Button onClick={()=>onClickCancel(r.rid, r.contents, r.text)}
                                     variant='danger btn-sm'>취소</Button>
                             </Col>
                             

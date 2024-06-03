@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react'
 import {Row, Col, Card, Form, InputGroup, Button} from 'react-bootstrap'
 import  Pagination from 'react-js-pagination'
 import './Paging.css'
-import { BsBalloonHeart, BsBalloonHeartFill } from "react-icons/bs";
+import { BsBalloonHeart, BsBalloonHeartFill} from "react-icons/bs";
+import { CiChat1 } from "react-icons/ci";
 
 const HomePage = () => {
   const uid=sessionStorage.getItem('uid');
@@ -86,10 +87,12 @@ const HomePage = () => {
                 <Row>
                   <Col>
                     <div className='ellipsis' style={{fontSize:'12px'}}>
-                      {book.fmtprice}
+                      {book.fmtprice}원
                     </div>
                   </Col>
                   <Col className='text-end'>
+                   <CiChat1  style={{fontSize:'20px'}}/>
+                   <span className='me-2' style={{fontSize:'12px'}}>{book.rcnt}</span>
                     {book.ucnt === 0 ?
                     <BsBalloonHeart className='heart' 
                       onClick={()=>onClicklike(book.bid)}/>

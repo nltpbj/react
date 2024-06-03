@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AiOutlineMail } from "react-icons/ai";
 import { BsKey } from "react-icons/bs";
 import { InputGroup, Form,  Button, Card, Col, Row } from 'react-bootstrap'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { CountContext } from '../CountContext';
 
 const LoginPage = () => {
+  const {callAPICount} = useContext(CountContext);
     const navi = useNavigate();
     const [form, setForm] = useState({
         uid:'',
@@ -32,6 +34,7 @@ const LoginPage = () => {
      alert("비밀번호가 일치하지 않습니다!");
    }else if(result===1){
      sessionStorage.setItem('uid', uid);
+     callAPICount();
      if(sessionStorage.getItem('target')){
        navi(sessionStorage.getItem('target'));
      }else{

@@ -7,13 +7,18 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import RouterPage from './RouterPage';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { FaShoppingCart } from "react-icons/fa";
+import { Badge } from 'react-bootstrap';
+import { CountContext } from './CountContext';
+import { FaCartShopping } from 'react-icons/fa6';
 
 
 const MenuPage = () => {
-    const uid= sessionStorage.getItem('uid');
-    const navi = useNavigate();
-    const[user, SetUser] = useState('');
+  const {count, setCount}= useContext(CountContext);
+  const navi = useNavigate();
+  const uid= sessionStorage.getItem('uid');
+  const[user, SetUser] = useState('');
 
     const callAPI = async() => {
         const url=`/users/read/${uid}`;
@@ -23,6 +28,12 @@ const MenuPage = () => {
        // console.log(uname);
     }
 
+    const getCartCount = async() => {
+      const res=await axios.get(`/cart/list?uid=${uid}`);
+      //console.log('...........',res.data.length);
+      setCount(res.data.length);
+    };
+  
     useEffect(()=>{
         if(uid) callAPI();
     }, [uid]);
@@ -47,6 +58,20 @@ const MenuPage = () => {
               </Nav>
               {uid ?
               <>
+              <Nav>
+                <Nav.Link className='active' href="/orders/cart">
+                  {count=== 0 ?
+                  <FaCartShopping style={{fontSize:'25px'}}/>
+                  :  
+                  <>
+                    <FaShoppingCart style={{fontSize:'25px', position:'absolute'}}/>
+                    <Badge bg="danger" style={{position:'relative', top:'-10px', left:'15px'}}>
+                    {count}
+                    </Badge>
+                  </>
+                  }
+                </Nav.Link> 
+              </Nav>
               <Nav>
                 <Nav.Link href='/users/mypage' className='active'>{user.uname}님</Nav.Link>
               </Nav>

@@ -1,11 +1,13 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Row, Col, Card, Button, Nav, Tab, Tabs } from 'react-bootstrap'
 import { useLocation, useParams } from 'react-router-dom'
 import { BsBalloonHeart, BsBalloonHeartFill } from "react-icons/bs";
 import ReviewPage from './ReviewPage';
+import { CountContext } from '../CountContext';
 
 const ReadPage = () => {
+    const {setCount, count} = useContext(CountContext);
     const uid = sessionStorage.getItem('uid');
     const pathname = useLocation();
     console.log(pathname);
@@ -52,6 +54,29 @@ const ReadPage = () => {
             callAPI();
         }
     }
+
+    const onClickCart = async()=> {
+        if(!sessionStorage.getItem('uid')){
+            sessionStorage.setItem('target', pathname);
+            window.location.href='/users/login';
+        }
+        //장바구니 넣기
+        const res=await axios.post('/cart/insert', {uid:sessionStorage.getItem('uid'), bid});
+        let message="";
+        if(res.data.result==1){
+            message="장바구니에 등록되었습니다";
+            setCount(count+1);
+        }else{
+            message=("장바구니에 이미 존재합니다");
+        }
+        if(window.confirm(`${message} 쇼핑을 계속하실래요?`)){
+            window.location.href='/';
+
+        }else{
+            window.location.href='/orders/cart';
+        }
+    };
+
     return (
         <Row className='my-5 justify-content-center'>
             <Col xs={12} md={10} lg={8}>
@@ -80,7 +105,7 @@ const ReadPage = () => {
                                 <div>정보 수정일: {fmtdate}</div>
                                 <div className='text-center mt-3'>
                                     <Button className='px-3 me-2' variant='success'>바로구매</Button>
-                                    <Button className='px-3'>장바구니</Button>
+                                    <Button className='px-3' onClick={onClickCart}>장바구니</Button>
                                 </div>
                             </Col>
                         </Row>
