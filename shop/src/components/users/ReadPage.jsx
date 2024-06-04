@@ -63,15 +63,15 @@ const ReadPage = () => {
                             <Col className='my-5'>
                                 <form onSubmit={onSubmit}>
                                     <InputGroup className='mb-2'>
-                                        <InputGroup.Text className='title justify-content-center'>이름</InputGroup.Text>
+                                        <InputGroup.Text className='px-4 title justify-content-center'>이름</InputGroup.Text>
                                         <Form.Control onChange={onChangeForm} name="uname" value={uname} />
                                     </InputGroup>
                                     <InputGroup className='mb-2 '>
-                                        <InputGroup.Text className='title justify-content-center'>전화번호</InputGroup.Text>
+                                        <InputGroup.Text className='px-3 title justify-content-center'>전화번호</InputGroup.Text>
                                         <Form.Control onChange={onChangeForm} name='phone' value={phone} />
                                     </InputGroup>
                                     <InputGroup className='mb-1'>
-                                        <InputGroup.Text className='title justify-content-center'>주소</InputGroup.Text>
+                                        <InputGroup.Text className='px-4 title justify-content-center'>주소</InputGroup.Text>
                                         <Form.Control onChange={onChangeForm} name='address1' value={address1} />
                                         <ModalAddress form={form} setForm={setForm} />
                                     </InputGroup>

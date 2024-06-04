@@ -12,6 +12,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { Badge } from 'react-bootstrap';
 import { CountContext } from './CountContext';
 import { FaCartShopping } from 'react-icons/fa6';
+import AdminRouter from './admin/AdminRouter';
 
 
 const MenuPage = () => {
@@ -53,8 +54,16 @@ const MenuPage = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className='me-auto'>
+                {uid==='admin' &&
+                <>
                 <Nav.Link href="/books/search">도서검색</Nav.Link>
                 <Nav.Link href="/books/list">도서목록</Nav.Link>
+                <Nav.Link href="/admin/orders">주문관리</Nav.Link>
+                </>
+                }
+                {uid && uid !=='admin' && 
+                     <Nav.Link href="/orders/list">주문목록</Nav.Link>
+                }
               </Nav>
               {uid ?
               <>
@@ -88,6 +97,7 @@ const MenuPage = () => {
           </Container>
         </Navbar>
         <RouterPage/>
+        <AdminRouter/>
         </>
       );
 }

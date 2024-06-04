@@ -6,6 +6,8 @@ import MenuPage from './components/MenuPage';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CountContext } from './components/CountContext';
+import AdminMenu from './components/AdminMenu';
+
 
 
 function App() {

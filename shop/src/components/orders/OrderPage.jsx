@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { Table, Alert, Card, Form, Button, InputGroup } from 'react-bootstrap'
 import ModalAddress from '../users/ModalAddress';
 import { v4 } from 'uuid';
+import { PiReceipt } from 'react-icons/pi';
 
 const OrderPage = ({books, setBooks}) => {
     const uuid = v4();
     const pid = uuid.substring(0, 13);
     const [total, setTotal] = useState(0);
+
+
 
     const [form, setForm] = useState({
         uid: '',
@@ -37,27 +40,26 @@ const OrderPage = ({books, setBooks}) => {
 
     const onChangeForm = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-
     }
+
     const onClickOrder = async() => {
         if(!window.confirm(`${books.length}개 도서를 주문하실래요?`)) return;
         const res=await axios.post('/orders/purchase',{
           ...form, sum:total, pid, uid});//주문자정보입력
         if(res.data.result===1){
+            let cnt=0;
           books.forEach(async book=>{
-            const res=await axios.post('/orders/insert',{
-                pid, bid:book.bid, price:book.price, qnt:book.qnt}); //주문상품입력
-            if(res.data.result===1){
-              await axios.post('/cart/delete', {uid, bid:book.bid}); //장바구니상품삭제
+            await axios.post('/orders/insert', {pid, bid:book.bid, price:book.price, qnt:book.qnt}); //주문상품입력
+            await axios.post('/cart/delete', {uid, bid:book.bid}); //장바구니상품삭제
+            cnt++;
+            if(cnt===books.length){
+                alert("주문이 완료되었습니다.");
+                window.location.href="/";
             }        
           });
-          alert("주문이 완료되었습니다.");
-          window.location.href="/";
         }
       }
 
-
-      
     return (
         <div>
             <h1 className='text-center mb-5'>주문하기</h1>

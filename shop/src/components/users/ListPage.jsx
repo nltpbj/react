@@ -10,7 +10,8 @@ const ListPage = () => {
     }
     useEffect(()=>{
         callAPI();
-    }, [])
+    }, []);
+    
   return (
     <div>ListPage</div>
   )
