@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import ReplyPage from './ReplyPage';
 
 const ReadPage = () => {
     const [form, setForm] = useState('');
@@ -58,6 +59,7 @@ const ReadPage = () => {
                 }
             </Col>
         </Row>
+        <ReplyPage bid={bid}/>
     </div>
   )
 }

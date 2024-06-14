@@ -233,6 +233,8 @@ select title,uid from bbs;
 
 select count(*) from bbs;
 
+drop view view_bbs;
+
 create view view_bbs as
 select b.*, u.uname, u.photo
 from bbs b, users u
@@ -247,3 +249,25 @@ limit 0, 5;
 select * 
 from users 
 where uid like 'c%';
+
+alter table bbs
+add column viewcnt int default 0;
+
+desc bbs;
+
+select bid, viewcnt from bbs where bid=119;
+
+create table reply(
+	rid int auto_increment primary key,
+    bid int not null,
+	uid varchar(20) not null,
+    regDate datetime default now(),
+    contents text,
+    foreign key(bid) references bbs(bid),
+    foreign key(uid) references users(uid)
+);
+
+desc reply;
+
+select * from reply;
+

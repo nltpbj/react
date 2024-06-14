@@ -63,6 +63,7 @@ const ListPage = () => {
             <td>작성자</td>
             <td>작성일</td>
             <td>조회수</td>
+            <td>댓글수</td>
           </tr>
         </thead>
         <tbody>
@@ -75,6 +76,7 @@ const ListPage = () => {
               <td>{bbs.uname}({bbs.uid})</td>
               <td>{bbs.fmtdate}</td>
               <td>{bbs.viewcnt}</td>
+              <td>{bbs.replycnt}</td>
             </tr>
           )}
         </tbody>
