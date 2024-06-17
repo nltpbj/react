@@ -9,3 +9,7 @@
 .title {
   width: 80px;
 }
+
+.bold{
+  font-weight: 800;
+}

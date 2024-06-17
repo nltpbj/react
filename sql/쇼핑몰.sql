@@ -235,6 +235,7 @@ select count(*) from bbs;
 
 drop view view_bbs;
 
+drop view view_bbs;
 create view view_bbs as
 select b.*, u.uname, u.photo
 from bbs b, users u
@@ -271,3 +272,88 @@ desc reply;
 
 select * from reply;
 
+insert into reply(bid, uid, contents)
+select bid, uid, contents from reply;
+
+select count(*) from reply;
+
+drop view view_reply;
+
+create view view_reply as
+select r.*,u.uname, u.photo,
+date_format(r.regdate,'%Y년%m월%d일 %T') as fmtdate, 
+date_format(r.updateDate,'%Y년%m월%d일 %T') as fmtupdate
+from reply r, users u
+where r.uid=u.uid;
+
+select * from view_reply
+where bid=119
+order by rid desc
+limit 0, 5;
+
+alter table reply
+add column updateDate datetime;
+
+desc reply;
+
+alter table bbs
+add column replycnt int default 0;
+
+update bbs 
+set replycnt=(select count(*) from reply where bbs.bid=reply.bid)
+where bid > 0;
+
+alter table reply
+add column rating int default 0;
+
+desc reply;
+desc view_reply;
+
+update reply
+set rating=3
+where bid>0;
+
+select rid, rating from reply;
+
+select * from users;
+update users
+set photo=null
+where uid > '';
+
+select * from users 
+where uid='kiin';
+update users
+set photo='/upload/photo/a01.png'
+where uid='kiin';
+
+create table messages(
+	mid int auto_increment primary key,
+    sender varchar(20) not null,
+    receiver varchar(20) not null,
+    message text,
+    sendDate datetime default now(),
+    readDate datetime, 
+    foreign key(sender) references users(uid),
+    foreign key(receiver) references users(uid)
+);
+
+desc messages;
+desc users;
+
+alter table users
+add column point int default 0;
+
+select * from messages;
+
+select uid, point from users
+where uid='blue';
+
+/*보낸메세지*/
+select m.*, u.uname, u.photo
+from messages m, users u
+where m.receiver=u.uid and mid=1;
+
+/*받은메세지*/
+select m.*, u.uname, u.photo
+from messages m, users u
+where m.receiver=u.uid and mid=1;
