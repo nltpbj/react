@@ -5,6 +5,7 @@ import ReceivePage from '../message/ReceivePage'
 import SendPAge from '../message/SendPAge'
 import ReadSend from '../message/ReadSend'
 import ReadReceive from '../message/ReadReceive'
+import DeletePage from '../message/DeletePage'
 
 const MessageRouter = () => {
   return (
@@ -14,6 +15,7 @@ const MessageRouter = () => {
         <Route path='receive' element={<ReceivePage/>}/>
         <Route path='send/:mid' element={<ReadSend/>}/>
         <Route path='receive/:mid' element={<ReadReceive/>}/>
+        <Route path='delete' element={<DeletePage/>}/>
     </Routes>
   )
 }

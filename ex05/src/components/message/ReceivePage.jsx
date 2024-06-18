@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import {Table} from 'react-bootstrap'
+import {Button, Table} from 'react-bootstrap'
 
 const ReceivePage = () => {
   const [checked, setChecked] = useState(0);
@@ -35,13 +35,32 @@ const ReceivePage = () => {
     setChecked(cnt);
   }, [list]);
 
+  const onDelete = () => {
+    if(checked===0){
+      alert('삭제할 메세지를 선택하세요');
+      return;
+    }
+
+    let cnt=0;
+    list.forEach(async(msg)=>{
+      if(msg.checked) {
+      await axios.post(`/message/receive/delete/${msg.mid}`);
+      cnt++;
+      }
+      if(cnt===checked) callAPI();
+
+    });
+  }
   return (
     <div className='my-5'>
         <h1 className='text-center'>받은메시지</h1>
+        <div className='mb-2'>
+          <Button onClick={onDelete} variant='danger'>선택삭제</Button>
+        </div>
         <Table striped hover>
           <thead>
             <tr className='table-danger'>
-            <td><input checked={checked===list.length}
+            <td><input checked={list.length> 0 && checked===list.length}
               type="checkbox" onChange={onChangeAll}/></td>
               <td>보낸이</td>
               <td>내용</td>
@@ -54,7 +73,7 @@ const ReceivePage = () => {
             <tr key={msg.mid} style={{fontWeight:'bold'}}>
               <td><input onChange={(e)=>onChangeSingle(e, msg.mid)}
                     type="checkbox" checked={msg.checked}/></td>
-              <td>{msg.uname}({msg.sender})</td>
+              <td>({msg.mid}){msg.uname}({msg.sender})</td>
               <td><span className={msg.readDate || 'bold'}>
                 <a href={`/message/receive/${msg.mid}`}>{msg.message.substring(0,30)}</a></span></td>
               <td>{msg.sendDate}</td>

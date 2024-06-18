@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const SendPAge = () => {
@@ -34,14 +34,26 @@ const SendPAge = () => {
     setChecked(cnt);
   }, [list]);
 
-
+const onDelete = () => {
+  let cnt=0;
+  list.forEach(async msg=>{
+    if(msg.checked) {
+      await axios.post(`/message/send/delete/${msg.mid}`);
+      cnt ++;
+    }
+    if(cnt===checked) callAPI();
+  });
+}
   return (
     <div className='my-5'>
         <h1 className='text-center'>보낸메세지</h1>
+        <div className='mb-2'>
+          <Button onClick={onDelete} variant='danger'>선택삭제</Button>
+        </div>
         <Table hover striped>
           <thead> 
               <tr className='table-danger'>
-              <td><input checked={checked===list.length}
+              <td><input checked={list.length > 0 && checked===list.length}
                 type="checkbox" onChange={onChangeAll}/></td>
                 <td>받은이</td>
                 <td>내용</td>
@@ -54,7 +66,7 @@ const SendPAge = () => {
               <tr key={msg.mid}>
                 <td><input onChange={(e)=>onChangeSingle(e, msg.mid)}
                     type="checkbox" checked={msg.checked}/></td>
-                <td>{msg.uname}({msg.receiver})</td>
+                <td>{msg.mid}{msg.uname}({msg.receiver})</td>
                 <td><div className='title'>
                   <Link to={`/message/send/${msg.mid}`}>{msg.message}</Link></div></td>
                 <td>{msg.sendDate}</td>
