@@ -49,26 +49,39 @@ const Listpage = () => {
     
     <div>
         <h1 className='text-center'>학생목록</h1>
-    <Table hover>
-        <Row>
-        <Col>
-          검색수:{count}명
-        </Col>
-        <Col>
-            <Link to='/stu/insert'>학생등록</Link>
-        </Col>
+        <Row className='mb-1'>
+          <Col>
+            검색수: {count}명
+          </Col>
+          <Col className='text-end'>
+              <Link to='/stu/insert'>학생등록</Link>
+          </Col>
         </Row>
+    <Table striped bordered hover className='text-center '>
+        <thead>
+          <div>
+        </div>
+          <tr className='table-info'>
+            <td>학번</td>
+            <td>이름</td>
+            <td>학년</td>
+            <td>학과</td>
+            <td>당담교수</td>
+            <td>생년월일</td>
+            <td>삭제</td>
+          </tr>
+        </thead>
         <tbody>
             {list.map(stu=>
                  <tr key={stu.scode}>
-                 <td>{stu.scode}</td>
-                 <td>{stu.sname}</td>
-                 <td>{stu.year}</td>
-                 <td>{stu.dept}</td>
-                 <td>{stu.pname}({stu.advisor})</td>
-                 <td>{stu.birthday}</td>
-                 <td>
-                 <Button onClick={()=>onClickDelete(stu.scode)} size='sm' variant='danger'>삭제</Button></td>
+                  <td><Link to={`/stu/read/${stu.scode}`}>{stu.scode}</Link></td>
+                  <td>{stu.sname}</td>
+                  <td>{stu.year}</td>
+                  <td>{stu.dept}</td>
+                  <td>{stu.pname &&  `${stu.pname}(${stu.advisor})`}</td>
+                  <td>{stu.birthday}</td>
+                  <td>
+                  <Button onClick={()=>onClickDelete(stu.scode)} size='sm' variant='danger'>삭제</Button></td>
                 </tr>
             )}
         </tbody>
