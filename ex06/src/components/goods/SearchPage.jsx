@@ -51,6 +51,7 @@ const SearchPage = () => {
     }
   }
 
+
   const onInsert = (good) => {
     setBox({
       show:true,
@@ -58,7 +59,7 @@ const SearchPage = () => {
       action:async()=>{
         const res=await axios.post('/goods/insert', {
           gid:good.productId,
-          title:good.title,
+          title:removeTags(good.title),
           image:good.image,
           maker:good.maker,
           brand:good.brand,
@@ -95,7 +96,8 @@ const SearchPage = () => {
           goods.forEach(async good=>{
             if(good.checked){
               const res=await axios.post('/goods/insert',{
-                gid:good.productId,title:good.title,
+                gid:good.productId,
+                title:removeTags(good.title),
                 image:good.image,maker:good.maker,
                 brand:good.brand,price:good.lprice
               });
@@ -116,6 +118,18 @@ const SearchPage = () => {
         }
       });
      
+    }
+
+    const onClickImage = async(image) => {
+      if(!window.confirm(`${image} 다운로드 하실래요?`)) return;
+      await axios.post(`/download?file=${image}`);
+      alert("다운로드완료");
+    }
+    
+    /**  */
+    const removeTags = (html) => {
+      const doc=new DOMParser().parseFromString(html, 'text/html');
+      return doc.body.textContent || '';
     }
 
   return (
@@ -142,7 +156,8 @@ const SearchPage = () => {
             <tr key={good.productId}>
                 <td><input onChange={(e)=>onChangeSingle(e, good.productId)}
                     type='checkbox' checked={good.checked}/></td>
-                <td><img src={good.image} width="100px"/></td>
+                <td><img onClick={()=>onClickImage(good.image)}
+                  src={good.image} width="100px"/></td>
                 <td><div dangerouslySetInnerHTML={{__html:good.title}}/><div>{good.lprice}원</div></td>
                 <td>{good.maker}</td>
                 <td>{good.brand}</td>

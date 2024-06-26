@@ -4,6 +4,7 @@ import { Button, Table } from 'react-bootstrap';
 import '../../common/Paging.css';
 import Pagination from 'react-js-pagination';
 import { BoxContext } from '../../common/BoxContext';
+import { Link } from 'react-router-dom';
 
 const ListPage = () => {
     const [checked, setChecked] = useState(0);
@@ -98,7 +99,11 @@ const ListPage = () => {
                                     type="checkbox" checked={good.checked} />
                             </td>
                             <td>
-                                <div><img src={good.image} width={80} style={{ border: '1px solid gray' }} /></div>
+                                <div>
+                                    <Link to={`/goods/update/${good.gid}`}>
+                                        <img src={good.image || 'http://via.placeholder.com/150x170'} width={80} style={{ border: '1px solid gray' }} />
+                                    </Link>
+                                </div>    
                                 <div>{good.gid}</div>
                             </td>
                             <td>

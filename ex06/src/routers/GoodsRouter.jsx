@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import SearchPage from '../components/goods/SearchPage'
 import ListPage from '../components/goods/ListPage'
+import UpdatePage from '../components/goods/UpdatePage'
 
 
 const GoodsRouter = () => {
@@ -10,6 +11,7 @@ const GoodsRouter = () => {
     <Routes>
         <Route path='search' element={<SearchPage/>}/>
         <Route path='list' element={<ListPage/>}/>
+        <Route path='update/:gid' element={<UpdatePage/>}/>
     </Routes>
   )
 }
