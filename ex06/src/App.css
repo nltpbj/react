@@ -6,6 +6,7 @@
   -webkit-box-orient: vertical;
 }
 
-.ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-  min-height: 400px; margin-bottom: 20px;
- }
+.fixed-width {
+  width: 80px;
+  display: inline-block; 
+}
