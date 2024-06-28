@@ -2,28 +2,35 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Button, Row, Col, Form, InputGroup, Badge } from 'react-bootstrap';
+import { Button, Row, Col, Form, InputGroup, Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ModalRelated from './ModalRelated';
 
 const Detail = ({form, setForm, callAPI, good}) => {
-  const [files, setFiles]= useState([]);
-  const [attaches, setAttaches] = useState([]);
-
   const style ={
     border: '1px solid gray',
     width: '100%',
   }
+  const [related, setRelated] = useState([]);
+  const [files, setFiles]= useState([]);
+  const [attaches, setAttaches] = useState([]);
 
   const callAttach = async() => {
     const res= await axios.get(`/goods/attach/${form.gid}`);
-    console.log(res.data);
+    //console.log(res.data);
     setAttaches(res.data);
-
   }
 
-  useEffect(()=> {
+  const callRelated = async() => {
+    const res1=await axios.get(`/goods/related/list/${form.gid}`);
+    //console.log(res1.data);
+    setRelated(res1.data);
+  }
+
+  useEffect(()=>{
     callAttach();
+    callRelated();
   }, []);
 
   const onClickSave = async() => {
@@ -35,9 +42,7 @@ const Detail = ({form, setForm, callAPI, good}) => {
     callAPI();
   }
 
-
   const onChangeFiles = (e) => {
-    
     let selFiles=[]
     for(let i=0; i<e.target.files.length; i++){
       const file={
@@ -71,6 +76,15 @@ const Detail = ({form, setForm, callAPI, good}) => {
     alert("첨부파일삭제");
     callAttach();
   }
+
+  const onClickRelatedDelete = async(rid) => {
+    if(!window.confirm(`${form.gid}-${rid} 삭제하실래요?`)) return;
+    //관련상품삭제
+    await axios.post('/goods/related/delete', {gid:form.gid, rid});
+    alert("삭제완료");
+    callRelated();
+  }
+
 
   return (
     <Tabs
@@ -106,26 +120,41 @@ const Detail = ({form, setForm, callAPI, good}) => {
       <Row className='my-5'>
 
 
-        {files.map(file=>
-          <Col key={file.name} md={3}>
-            <img src={file.name} width='100%'/>
+      {files.map(file=>
+          <Col key={file.name} xs={4} md={3} lg={2} className='mb-3'>
+            <img src={file.name} style={style}/>
           </Col>
         )}
-        
       </Row>  
     </Tab>
     <Tab eventKey="attach" title="첨부한파일">
-        <Row>
+        <Row className='my-5'>
           {attaches.map(att=>
-            <Col key={att.aid} xs={2} className='mb-3'>
-              <div style={{position:'relative'}}>
-                  <Badge onClick={()=>onClickDelete(att)} 
-                    bg='danger' style={{position:'absolute', top:'10px', left:'10px', cursor:'pointer'}}>x</Badge>
-              </div>
-              <img src={att.filename} style={style}/>
+            <Col key={att.aid} xs={4} md={3} lg={2} className='mb-3'>
+                <div style={{position:'relative'}}>
+                  <Badge onClick={()=>onClickDelete(att)}
+                    bg='danger' style={{position:'absolute', top:'5px', right:'5px', cursor:'pointer'}}>X</Badge>
+                  <img src={att.filename} style={style}/>
+                </div>
             </Col>
           )}
         </Row>
+    </Tab>
+    <Tab eventKey="related" title="관련상품">
+        <ModalRelated gid={form.gid} callRelated={callRelated}/>
+        <Table className='mt-5'>
+          <tbody>
+            {related.map(goods=>
+              <tr key={goods.rid}>
+                <td>{goods.rid}</td>
+                <td>{goods.title}</td>
+                <td>{goods.price}원</td>
+                <td><Button onClick={()=>onClickRelatedDelete(goods.rid)}
+                  size='sm' variant='outline-danger'>삭제</Button></td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
     </Tab>
   </Tabs>
   )

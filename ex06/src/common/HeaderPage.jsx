@@ -37,6 +37,7 @@ const HeaderPage = () => {
     dots: true,
     infinite: true,
     speed: 1000,
+    autoplaySpeed:5000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
