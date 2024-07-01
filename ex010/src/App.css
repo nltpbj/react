@@ -6,13 +6,6 @@
   -webkit-box-orient: vertical;
 }
 
-.title {
-  width: 80px;
-}
-
-.bold{
-  font-weight: 800;
-}
 
 
 /* 메뉴페이지에서 사용할것 */
@@ -43,10 +36,9 @@
   color: white; /* 글씨 색상을 하얀색으로 설정 */
 }
 
-.tlqkf {
+.logo-custom {
   display: block;
   text-align:right;
-  
 }
 
 .logo-image {
@@ -54,4 +46,16 @@
   height: auto; /* 높이를 자동으로 설정하여 비율 유지 */
 }
 
+.nav-link-box {
+  border: 1px solid white;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1); /* 투명 배경 */
+}
 
+nav .nav-link {
+  color: white; /* 네브바의 글씨 색상을 하얀색으로 설정 */
+}
+
+.nav-border {
+  border-bottom: 1px solid white; /* 네비게이션 바의 하단에 흰색 선 추가 */
+}

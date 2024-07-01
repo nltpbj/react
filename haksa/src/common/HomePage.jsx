@@ -9,16 +9,7 @@ const HomePage = () => {
   return (
     <div>
       <h1 className='text-center'>홈페이지</h1>
-      <Row>
-        <Col>
-          <FinancePage/>
-        </Col>
-        <Col>
-          <Chart1/>
-          <Chart3/>
-        </Col>
-      </Row>
-      <Chart2/>  
+
     </div>
   )
 }

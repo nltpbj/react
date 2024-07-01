@@ -5,6 +5,7 @@ import { Container } from 'react-bootstrap';
 import { useState } from 'react';
 import { BoxContext } from './context/BoxContext';
 import Box from './common/Box';
+import { Link } from 'react-router-dom';
 
 function App() {
   const [box, setBox] = useState({
