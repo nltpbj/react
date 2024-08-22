@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table, Row, Col, InputGroup, Form, Button } from 'react-bootstrap';
-import '../Paging.css';
 import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom';
+import '../../App.css'
 
 const ListPage = () => {
   const [list, setList] = useState([]);
@@ -28,6 +28,7 @@ const ListPage = () => {
     e.preventDefault();
     callAPI();
   }
+
   return (
     <div className='my-5'>
       <h1 className='text-center mb-5'>게시판</h1>
@@ -55,7 +56,7 @@ const ListPage = () => {
         </Col>
         }
       </Row>
-      <Table striped bordered hover className='text-center '>
+      <Table  bordered hover className='text-center '>
         <thead>
           <tr className='table-info'>
             <td>ID</td>
@@ -71,7 +72,7 @@ const ListPage = () => {
             <tr key={bbs.bid} className='text-center'>
               <td>{bbs.bid}</td>
               <td className='text-start'>
-                <div className='ellipsis'><a href={`/bbs/read/${bbs.bid}`}>{bbs.title}</a></div>
+                <div className='none-underline'><a href={`/bbs/read/${bbs.bid}`}>{bbs.title}</a></div>
               </td>
               <td>{bbs.uname}({bbs.uid})</td>
               <td>{bbs.fmtdate}</td>
@@ -95,4 +96,4 @@ const ListPage = () => {
   )
 }
 
-export default ListPage
+export default ListPage;
